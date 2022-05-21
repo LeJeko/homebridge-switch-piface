@@ -1,5 +1,5 @@
 {
-    "pluginAlias": "DummySwitch",
+    "pluginAlias": "PifaceSwitch",
     "pluginType": "accessory",
     "singular": false,
     "schema": {

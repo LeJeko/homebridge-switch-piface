@@ -1,17 +1,19 @@
 {
-  "name": "homebridge-dummy",
-  "version": "0.6.0",
-  "description": "Dummy switches for Homebridge: https://github.com/nfarina/homebridge",
-  "license": "ISC",
+  "name": "homebridge-switch-piface",
+  "version": "1.0.0",
+  "description": "Piface switches for Homebridge",
+  "license": "MIT",
   "keywords": [
-    "homebridge-plugin"
+    "homebridge-plugin",
+    "piface",
+    "switch"
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/nfarina/homebridge-dummy.git"
+    "url": "git://github.com/LeJeko/homebridge-switch-piface.git"
   },
   "bugs": {
-    "url": "http://github.com/nfarina/homebridge-dummy/issues"
+    "url": "https://github.com/LeJeko/homebridge-switch-piface/issues"
   },
   "engines": {
     "node": ">=0.12.0",

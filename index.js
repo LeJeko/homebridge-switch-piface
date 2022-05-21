@@ -3,16 +3,19 @@
 var Service, Characteristic, HomebridgeAPI;
 const { HomebridgeDummyVersion } = require('./package.json');
 
+var PIFD = require('/usr/local/lib/node_modules/node-pifacedigital');
+var pi = new PIFD.PIFaceDigital(0,false);
+
 module.exports = function(homebridge) {
 
   Service = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
   HomebridgeAPI = homebridge;
-  homebridge.registerAccessory("homebridge-dummy", "DummySwitch", DummySwitch);
+  homebridge.registerAccessory("homebridge-switch-piface", "PifaceSwitch", PifaceSwitch);
 }
 
 
-function DummySwitch(log, config) {
+function PifaceSwitch(log, config) {
   this.log = log;
   this.name = config.name;
   this.stateful = config.stateful;
@@ -25,9 +28,9 @@ function DummySwitch(log, config) {
   this.informationService = new Service.AccessoryInformation();
   this.informationService
       .setCharacteristic(Characteristic.Manufacturer, 'Homebridge')
-      .setCharacteristic(Characteristic.Model, 'Dummy Switch')
-      .setCharacteristic(Characteristic.FirmwareRevision, HomebridgeDummyVersion)
-      .setCharacteristic(Characteristic.SerialNumber, 'Dummy-' + this.name.replace(/\s/g, '-'));
+      .setCharacteristic(Characteristic.Model, 'Piface Switch')
+      // .setCharacteristic(Characteristic.FirmwareRevision, HomebridgeDummyVersion)
+      // .setCharacteristic(Characteristic.SerialNumber, 'Dummy-' + this.name.replace(/\s/g, '-'));
   
   this.cacheDirectory = HomebridgeAPI.user.persistPath();
   this.storage = require('node-persist');
@@ -48,11 +51,11 @@ function DummySwitch(log, config) {
   }
 }
 
-DummySwitch.prototype.getServices = function() {
+PifaceSwitch.prototype.getServices = function() {
   return [this.informationService, this._service];
 }
 
-DummySwitch.prototype._setOn = function(on, callback) {
+PifaceSwitch.prototype._setOn = function(on, callback) {
 
   this.log("Setting switch to " + on);
 
@@ -61,6 +64,7 @@ DummySwitch.prototype._setOn = function(on, callback) {
       clearTimeout(this.timer);
     }
     this.timer = setTimeout(function() {
+      pi.set(0,0);
       this._service.setCharacteristic(Characteristic.On, false);
     }.bind(this), this.time);
   } else if (!on && this.reverse && !this.stateful) {
@@ -68,6 +72,7 @@ DummySwitch.prototype._setOn = function(on, callback) {
       clearTimeout(this.timer);
     }
     this.timer = setTimeout(function() {
+      pi.set(0,1);
       this._service.setCharacteristic(Characteristic.On, true);
     }.bind(this), this.time);
   }

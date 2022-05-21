@@ -1,12 +1,12 @@
 
-# "Dummy Switches" Plugin
+# "Piface Switches" Plugin
 
 Example config.json:
 
 ```
     "accessories": [
         {
-          "accessory": "DummySwitch",
+          "accessory": "PifaceSwitch",
           "name": "My Switch 1"
         }   
     ]
