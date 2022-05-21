@@ -3,7 +3,7 @@
 var Service, Characteristic, HomebridgeAPI;
 const { HomebridgeDummyVersion } = require('./package.json');
 
-var PIFD = require('/usr/local/lib/node_modules/node-pifacedigital');
+var PIFD = require('node-pifacedigital');
 var pi = new PIFD.PIFaceDigital(0,false);
 
 module.exports = function(homebridge) {
