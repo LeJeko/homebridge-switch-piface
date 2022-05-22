@@ -1,6 +1,6 @@
 {
   "name": "homebridge-switch-piface",
-  "version": "1.0.2",
+  "version": "1.1.2",
   "description": "Piface switches for Homebridge",
   "license": "MIT",
   "keywords": [

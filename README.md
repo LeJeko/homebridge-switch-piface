@@ -1,5 +1,19 @@
+<p align="center">
+  <a href="https://github.com/homebridge/homebridge"><img src="https://raw.githubusercontent.com/homebridge/branding/master/logos/homebridge-color-round-stylized.png" height="140"></a>
+</p>
 
-# "Piface Switches" Plugin
+<span align="center">
+
+# homebridge-switch-piface
+
+[![npm](https://img.shields.io/npm/v/homebridge-switch-piface.svg)](https://www.npmjs.com/package/homebridge-switch-piface) [![npm](https://img.shields.io/npm/dt/homebridge-switch-piface.svg)](https://www.npmjs.com/package/homebridge-switch-piface)
+
+</span>
+
+## Description
+With this plugin, you can create switches that will control Piface outputs.
+
+This fork is adapted from [homebridge-dummy](https://github.com/nfarina/homebridge-dummy).
 
 Example config.json:
 
@@ -7,27 +21,55 @@ Example config.json:
     "accessories": [
         {
           "accessory": "PifaceSwitch",
-          "name": "My Switch 1"
+          "output": 0,
+          "name": "My Switch"
         }   
     ]
-
 ```
 
-With this plugin, you can create any number of fake switches that will do nothing when turned on (and will automatically turn off right afterward, simulating a stateless switch). This can be very useful for advanced automation with HomeKit scenes.
+## Installation
 
-For instance, the Philips Hue app will automatically create HomeKit scenes for you based on Hue Scenes you create. But what if you want to create a scene that contains both Philips Hue actions and other actions (like turning on the coffee maker with a WeMo outlet)? You are forced to either modify the Hue-created scene (which can be a HUGE list of actions if you have lots of lights) or build your own HomeKit lighting scenes.
+On a fresh installation you should enable SPI.
 
-Instead, you can link scenes using these dummy switches. Let's say you have a Hue Scene called "Rise and Shine" that you want to activate in the morning. And you have also setup the system HomeKit scene "Good Morning" to turn on your coffee maker and disarm you security system. You can add a single dummy switch to your Good Morning scene, then create a Trigger based on the switching-on of the dummy switch that also activates Rise And Shine.
+Therefore start `raspi-config` -> `Interface Options` -> `SPI` -> `Yes`.
+
+Reboot the RPi.
+
+#### Install necessary libraries
+
+```
+git clone https://github.com/piface/libmcp23s17.git
+cd libmcp23s17/
+make
+sudo make install
+cd ..
+```
+
+```
+git clone https://github.com/piface/libpifacedigital.git
+cd libpifacedigital/
+make
+sudo make install
+cd ..
+```
+
+#### Install the plugin
+Use Homebridge web UI
+or
+```
+hb-service add homebrige-switch-piface
+```
 
 ## Stateful Switches
 
-The default behavior of a dummy switch is to turn itself off one second after being turned on. However you may want to create a dummy switch that remains on and must be manually turned off. You can do this by passing an argument in your config.json:
+The default behavior of a switch is to turn itself off one second after being turned on. However you may want to create a switch that remains on and must be manually turned off. You can do this by passing an argument in your config.json:
 
 ```
     "accessories": [
         {
-          "accessory": "DummySwitch",
-          "name": "My Stateful Switch 1",
+          "accessory": "PifaceSwitch",
+          "output": 0,
+          "name": "My Stateful Switch",
           "stateful": true
         }   
     ]
@@ -36,13 +78,14 @@ The default behavior of a dummy switch is to turn itself off one second after be
 
 ## Reverse Switches
 
-You may also want to create a dummy switch that turns itself on one second after being turned off. This can be done by passing the 'reverse' argument in your config.json:
+You may also want to create a switch that turns itself on one second after being turned off. This can be done by passing the 'reverse' argument in your config.json:
 
 ```
     "accessories": [
         {
-          "accessory": "DummySwitch",
-          "name": "My Stateful Switch 1",
+          "accessory": "PifaceSwitch",
+          "output": 0,
+          "name": "My Reverse Switch",
           "reverse": true
         }   
     ]
@@ -56,8 +99,9 @@ You may also want to create a timed switch that turns itself off after being on 
 ```
     "accessories": [
         {
-          "accessory": "DummySwitch",
-          "name": "My Stateful Switch 1",
+          "accessory": "PifaceSwitch",
+          "output": 0,
+          "name": "My Timed Switch",
           "time": 5000
         }   
     ]
@@ -72,8 +116,9 @@ This can be done by passing the 'resettable' argument in your config.json:
 ```
     "accessories": [
         {
-          "accessory": "DummySwitch",
-          "name": "My Stateful Switch 1",
+          "accessory": "PifaceSwitch",
+          "output": 0,
+          "name": "My Stateful Switch",
           "time": 5000,
           "resettable": true
         }   

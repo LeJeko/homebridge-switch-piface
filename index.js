@@ -17,6 +17,7 @@ module.exports = function(homebridge) {
 
 function PifaceSwitch(log, config) {
   this.log = log;
+  this.output = config.output;
   this.name = config.name;
   this.stateful = config.stateful;
   this.reverse = config.reverse;
@@ -64,7 +65,6 @@ PifaceSwitch.prototype._setOn = function(on, callback) {
       clearTimeout(this.timer);
     }
     this.timer = setTimeout(function() {
-      pi.set(0,0);
       this._service.setCharacteristic(Characteristic.On, false);
     }.bind(this), this.time);
   } else if (!on && this.reverse && !this.stateful) {
@@ -72,11 +72,20 @@ PifaceSwitch.prototype._setOn = function(on, callback) {
       clearTimeout(this.timer);
     }
     this.timer = setTimeout(function() {
-      pi.set(0,1);
       this._service.setCharacteristic(Characteristic.On, true);
     }.bind(this), this.time);
   }
-  
+
+  // Debug : Read Input
+  // var val = pi.get(0);
+  // this.log("Input 0 = " + val)
+
+  if (on) {
+    pi.set(this.output,1);
+  } else {
+    pi.set(this.output,0);
+  }
+
   if (this.stateful) {
 	this.storage.setItemSync(this.name, on);
   }
